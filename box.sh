@@ -73,7 +73,7 @@ function check_distribution {
     distro=$(uname -a)
     TUI=$([[ "$distro" == *"Debian"* ]] && echo "whiptail" || echo "dialog")
     while true; do
-        choice=$($TUI --title "System Setup Menu" --menu "Select an option:" 15 60 7 \
+        choice=$("$TUI" --title "System Setup Menu" --menu "Select an option:" 15 60 7 \
         "1" "Install system security updates" \
         "2" "Install Plex Media Server" \
         "3" "Install Transmission" \
