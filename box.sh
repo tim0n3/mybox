@@ -21,11 +21,7 @@ function check_package_manager {
 function update_system {
     check_package_manager
     echo "Updating system..."
-    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
-        apt-get update && apt-get upgrade -y
-    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
-        dnf update -y
-    fi
+    $PACKAGE_MANAGER update && $PACKAGE_MANAGER upgrade -y
 }
 
 # Function to install Plex Media Server
