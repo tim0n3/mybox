@@ -28,14 +28,9 @@ function update_system {
 function install_plex {
     check_package_manager
     echo "Installing Plex Media Server..."
-    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
-        apt-get install plexmediaserver -y
-    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
-        dnf install plexmediaserver -y
-    else
-        echo "Please manually install Plex Media Server from https://www.plex.tv/media-server-downloads/"
-    fi
+    $PACKAGE_MANAGER install plexmediaserver -y
 }
+
 
 # Function to install Transmission
 function install_transmission {
