@@ -69,6 +69,8 @@ function delete_user {
     echo "User $user_to_delete deleted."
 }
 
+# Temp file solution worked...
+
 check_distribution() {
     distro=$(uname -a)
     TUI=$([[ "$distro" == *"Debian"* ]] && echo "whiptail" || echo "dialog")
