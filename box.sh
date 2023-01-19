@@ -34,14 +34,9 @@ function install_plex {
 
 # Function to install Transmission
 function install_transmission {
+    check_package_manager
     echo "Installing Transmission..."
-    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
-        apt-get install transmission-daemon transmission-cli transmission-common transmission-web -y
-    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
-        dnf install transmission-daemon transmission-cli transmission-common transmission-web -y
-    else
-        echo "Transmission installation not supported for this package manager"
-    fi
+    $PACKAGE_MANAGER install transmission-daemon transmission-cli transmission-common transmission-web -y
     systemctl start transmission-daemon
 }
 
