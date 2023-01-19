@@ -69,18 +69,20 @@ function delete_user {
     echo "User $user_to_delete deleted."
 }
 
-function check_distribution {
+check_distribution() {
     distro=$(uname -a)
     TUI=$([[ "$distro" == *"Debian"* ]] && echo "whiptail" || echo "dialog")
-    while true; do
-    choice=`"$TUI" --title "System Setup Menu" --menu "Select an option:" 15 60 7 \
-    "1" "Install system security updates" \
-    "2" "Install Plex Media Server" \
-    "3" "Install Transmission" \
-    "4" "Add new user and chroot-jail" \
-    "5" "Install Netdata" \
-    "6" "Delete user" \
-    "7" "Exit"`
+    tempfile=$(mktemp)
+    "$TUI" --title "System Setup Menu" --menu "Select an option:" 15 60 7 \
+        "1" "Install system security updates" \
+        "2" "Install Plex Media Server" \
+        "3" "Install Transmission" \
+        "4" "Add new user and chroot-jail" \
+        "5" "Install Netdata" \
+        "6" "Delete user" \
+        "7" "Exit" 2>$tempfile
+    choice=$(<$tempfile)
+    rm $tempfile
     case $choice in
         1) update_system;;
         2) install_plex;;
@@ -91,6 +93,9 @@ function check_distribution {
         7) exit;;
         *) echo "Invalid option. Please try again.";;
     esac
+}
+
+while true; do
+    check_distribution
 done
 
-}
