@@ -6,31 +6,36 @@ if [ "$EUID" -ne 0 ]; then
     exit
 fi
 
-# Check system type
-system=`uname -s`
+# Function to check package manager
+function check_package_manager {
+    if command -v apt-get > /dev/null; then
+        PACKAGE_MANAGER="apt-get"
+    elif command -v dnf > /dev/null; then
+        PACKAGE_MANAGER="dnf"
+    else
+        echo "Package manager not supported for this distribution"
+    fi
+}
 
 # Function to install system security updates
 function update_system {
-    if [[ $system == "Linux" ]]; then
-        distro=`cat /etc/*-release | grep -o "ID=.*" | awk -F'=' '{print $2}'`
-        if [[ $distro == "debian" || $distro == "rhel" ]]; then
-            echo "Updating system..."
-            apt-get update && apt-get upgrade -y
-        else
-            echo "System update not supported for this distribution"
-        fi
-    else
-        echo "System update not supported for this OS"
+    check_package_manager
+    echo "Updating system..."
+    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
+        apt-get update && apt-get upgrade -y
+    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
+        dnf update -y
     fi
 }
 
 # Function to install Plex Media Server
 function install_plex {
+    check_package_manager
     echo "Installing Plex Media Server..."
-    if command -v apt-get > /dev/null; then
+    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
         apt-get install plexmediaserver -y
-    elif command -v yum > /dev/null; then
-        yum install plexmediaserver -y
+    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
+        dnf install plexmediaserver -y
     else
         echo "Please manually install Plex Media Server from https://www.plex.tv/media-server-downloads/"
     fi
@@ -39,10 +44,10 @@ function install_plex {
 # Function to install Transmission
 function install_transmission {
     echo "Installing Transmission..."
-    if command -v apt-get > /dev/null; then
+    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
         apt-get install transmission-daemon transmission-cli transmission-common transmission-web -y
-    elif command -v yum > /dev/null; then
-        yum install transmission-daemon transmission-cli transmission-common transmission-web -y
+    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
+        dnf install transmission-daemon transmission-cli transmission-common transmission-web -y
     else
         echo "Transmission installation not supported for this package manager"
     fi
@@ -66,10 +71,10 @@ function add_user {
 # Function to install netdata
 function install_netdata {
     echo "Installing Netdata..."
-    if command -v apt-get > /dev/null; then
+    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
         apt-get install netdata -y
-    elif command -v yum > /dev/null; then
-        yum install netdata -y
+    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
+        dnf install netdata -y
     else
         echo "Netdata installation not supported for this package manager"
     fi
