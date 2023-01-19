@@ -8,8 +8,8 @@ fi
 
 # Function to check package manager
 function check_package_manager {
-    if command -v apt-get > /dev/null; then
-        PACKAGE_MANAGER="apt-get"
+    if command -v apt > /dev/null; then
+        PACKAGE_MANAGER="apt"
     elif command -v dnf > /dev/null; then
         PACKAGE_MANAGER="dnf"
     else
