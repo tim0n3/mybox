@@ -57,13 +57,7 @@ function add_user {
 # Function to install netdata
 function install_netdata {
     echo "Installing Netdata..."
-    if [[ $PACKAGE_MANAGER == "apt-get" ]]; then
-        apt-get install netdata -y
-    elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
-        dnf install netdata -y
-    else
-        echo "Netdata installation not supported for this package manager"
-    fi
+    $PACKAGE_MANAGER install netdata -y
     systemctl start netdata
 }
 
